@@ -69,6 +69,11 @@ button:focus-visible {
 
 @import 'https://fonts.googleapis.com/css?family=Open+Sans';
 
+@font-face {
+  font-family: 'Rocher';
+  src: url(https://assets.codepen.io/9632/RocherColorGX.woff2);
+}
+
 * {
 	-webkit-box-sizing: border-box;
 	box-sizing: border-box;
@@ -97,20 +102,39 @@ body {
 	overflow: hidden;
 }
 .navbar .left-wrapper,li{
-	height: 64px;
+	display: inline-flex;
+  	align-items: center;
+	height: 54px;
 	padding: 15px;
     float: left;
 }
 .navbar h1{
 	margin: 0;
+	position: relative;
+	color: #FAFAFA;
+	font-family: 'Rocher';
+} 
+.white{
+	font-palette: --White;
 }
-.navbar a{
-	font-size: 18px;
+@font-palette-values --White{
+	font-family: Rocher;
+  	base-palette: 4;
+}
+.navbar button{
+	padding: 8px;
+	border: 0;
+	border-radius: 5px;
+	background-color: #0077b6;
+	font-size: 15px;
+	font-weight: 600;
+	text-transform: uppercase;
     color: #FAFAFA;
     text-align: center;
+	cursor: pointer;
 }
-.navbar a:hover{
-    color: hsl(0, 0%, 69%);
+.navbar button:hover{
+    background-color: #0069a1;
 }
 
 main {
@@ -138,10 +162,4 @@ h3 {
 	padding-bottom: 15px;
 	border-bottom: 1px solid #D8D8D8;
 	border-top: 1px solid #D8D8D8;
-}
-
-@media (min-width: 1921px) {
-	body {
-		font-size: 18px;
-	}
 }
