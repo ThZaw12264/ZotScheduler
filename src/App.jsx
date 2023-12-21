@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import Navbar from './Navbar'
 import DegreeWorksUploader from './UploadDegreeWorks'
 
 function App() {
@@ -6,8 +7,10 @@ function App() {
 
   return (
     <>
-      <h1>ZotScheduler</h1>
-      <DegreeWorksUploader />
+      <Navbar />
+      <main>
+        <DegreeWorksUploader />
+      </main>
     </>
   )
 }
