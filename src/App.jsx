@@ -1,18 +1,20 @@
-import { useState } from 'react'
-import Navbar from './Navbar'
-import DegreeWorksUploader from './UploadDegreeWorks'
+import Navbar from './Navbar';
+import SplitPane from 'react-split-pane';
+import LeftPane from './LeftPane';
+import RightPane from './RightPane';
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
     <>
       <Navbar />
       <main>
-        <DegreeWorksUploader />
+        <SplitPane split="vertical">
+          <LeftPane />
+          <RightPane />
+        </SplitPane>
       </main>
     </>
-  )
+  );
 }
 
-export default App
+export default App;

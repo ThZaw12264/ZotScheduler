@@ -1,11 +1,11 @@
 function Navbar() {
   return (
     <>
-      <div class="navbar">
-            <div class="left-wrapper">
-                <h1 class="white">ZotScheduler</h1>
+      <div className="navbar">
+            <div className="left-wrapper">
+                <h1 className="white">ZotScheduler</h1>
             </div>
-            <div class="right-wrapper">
+            <div className="right-wrapper">
                 <ul>
                     <li><button onClick='myFunction()'>Save</button></li>
                     <li><button onClick='myFunction()'>Load</button></li>
