@@ -6,7 +6,9 @@ function LeftPane() {
 
   return (
     <>
-      <DegreeWorksUploader />
+      <div class="pane">
+        <DegreeWorksUploader />
+      </div>
     </>
   )
 }
