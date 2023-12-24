@@ -1,13 +1,18 @@
-import { useState } from 'react'
+import { Grid, Container, Divider } from '@mantine/core';
+import Year from './Year'
 
 function LeftPane() {
-  const [count, setCount] = useState(0)
-
   return (
     <>
-      <div class="pane">
-        <h1>HELLO!</h1>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+      <div className="pane">
+        <Container>
+          <Grid gutter='lg'>
+            <Grid.Col><Year year="First Year (2021)"/></Grid.Col>
+            <Grid.Col><Year year="Second Year (2022)"/></Grid.Col>
+            <Grid.Col><Year year="Third Year (2023)"/></Grid.Col>
+            <Grid.Col><Year year="Fourth Year (2024)"/></Grid.Col>
+          </Grid>
+        </Container>
       </div>    
     </>
   )
