@@ -17,7 +17,7 @@ body {
 	font-family: 'Open Sans', sans-serif;
 	line-height: 1.75em;
 	font-size: 16px;
-	background-color: #caf0f869;;
+	background-color: #E4F6F8;
 	color: #212529;
 }
 
@@ -102,11 +102,12 @@ div[data-type="Resizer"]:hover {
   border-color: #9fb8c53f;
   border-style: solid;
   overflow: auto;
+  box-shadow: 0 5px 10px rgba(154,160,185,.05);
 }
 
 .year {
   background-color: #abbcc525;
-  border-style: solid;
+  border-style: groove;
   border-radius: 15px;
   border-color: #9fb8c53f;
   padding: 10px;

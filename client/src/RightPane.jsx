@@ -3,6 +3,7 @@ import DegreeWorksUploader from './UploadDegreeWorks'
 
 function RightPane() {
   const [parsingStatus, setParsingStatus] = useState();
+  const [data, setData] = useState({});
 
   const handleUpload = async (file) => {
     setParsingStatus("parsing");
@@ -11,15 +12,18 @@ function RightPane() {
     formData.append("file", file);
 
     try {
-      const result = await fetch("https://httpbin.org/post", {
+      fetch("/api/parse", {
         method: "POST",
         body: formData,
-      });
-
-      const data = await result.json();
-
-      console.log(data);
-      setParsingStatus("success");
+      }).then(
+        response => response.json()
+      ).then(
+        data => {
+          console.log(data);
+          setData(data);
+          setParsingStatus("success");
+        }
+      );
     } catch (error) {
       console.error(error);
       setParsingStatus("fail");
@@ -28,7 +32,7 @@ function RightPane() {
 
   const Result = ({parsingStatus}) => {
     if (parsingStatus === "success") {
-      return <p>✅ File parsed successfully!</p>;
+      return <p>✅ File parsed successfully! Major: {data["Major"]}</p>;
     } else if (parsingStatus === "fail") {
       return <p>❌ File parse failed!</p>;
     } else if (parsingStatus === "parsing") {

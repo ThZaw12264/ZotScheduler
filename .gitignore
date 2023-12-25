@@ -22,3 +22,11 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Python Venv
+pymupdf-venv/
+
+# Server
+uploads/
+DegreeWorks.pdf
+output.txt
