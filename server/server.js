@@ -9,7 +9,7 @@ app.post('/api/parse', upload.single("file"), (req, res) => {
     const spawn = require('child_process').spawn;
     const python_process = spawn('python', ["parse.py", req.file.path]);
     python_process.stdout.on('data', (data) => {
-        console.log(data.toString());
-        res.json({"Major": data.toString()})
+        console.log(JSON.parse(data.toString()));
+        res.json(JSON.parse(data.toString()))
     });
 });
