@@ -1,5 +1,7 @@
 import { useState } from 'react'
-import DegreeWorksUploader from './UploadDegreeWorks'
+import DegreeWorksUploader from './DegreeWorksUploader'
+import Profile from './Profile'
+import ParsingNotification from './ParsingNotification';
 
 function RightPane() {
   const [parsingStatus, setParsingStatus] = useState();
@@ -30,24 +32,13 @@ function RightPane() {
     }
   };
 
-  const Result = ({parsingStatus}) => {
-    if (parsingStatus === "success") {
-      return <p>✅ File parsed successfully! Major: {data["Major"]}</p>;
-    } else if (parsingStatus === "fail") {
-      return <p>❌ File parse failed!</p>;
-    } else if (parsingStatus === "parsing") {
-      return <p>⏳ Parsing selected file...</p>;
-    } else {
-      return null;
-    }
-  };
-
   return (
     <>
       <div className="pane">
-        <DegreeWorksUploader parsingStatus={parsingStatus} handleUpload={handleUpload} />
-        <Result parsingStatus={parsingStatus} />
+        <DegreeWorksUploader handleUpload={handleUpload} />
+        <Profile data={data}/>
       </div>
+      <ParsingNotification parsingStatus={parsingStatus} />
     </>
   )
 }
