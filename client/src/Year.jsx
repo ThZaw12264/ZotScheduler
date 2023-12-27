@@ -1,18 +1,27 @@
 import { Grid, Group, Title } from '@mantine/core';
 import Quarter from './Quarter';
 
-function Year({year}) {
+function Year({yearName, yearData}) {
+  const quarters = (Object.keys(yearData).length === 0)
+  ? <>
+    <Grid.Col span={{xs: 3}}><Quarter quarterName="Fall" quarterData={{}}/></Grid.Col>
+    <Grid.Col span={{xs: 3}}><Quarter quarterName="Winter" quarterData={{}}/></Grid.Col>
+    <Grid.Col span={{xs: 3}}><Quarter quarterName="Spring" quarterData={{}}/></Grid.Col>
+    <Grid.Col span={{xs: 3}}><Quarter quarterName="Summer" quarterData={{}}/></Grid.Col>
+    </>
+  :
+    Object.keys(yearData).map((quarter) => (
+      <Grid.Col key={quarter} span={{xs: 3}}><Quarter quarterName={quarter} quarterData={yearData[quarter]} /></Grid.Col>
+    ));
+
   return (
     <>
       <div className="year">
-        <Group className="year-header">
-          <Title order={4}>{year}</Title>
+        <Group className="year-header" pb="xs">
+          <Title order={4}>{yearName}</Title>
         </Group>
         <Grid gutter='xs'>
-          <Grid.Col span={{xs: 3}}><Quarter quarter="Fall" /></Grid.Col>
-          <Grid.Col span={{xs: 3}}><Quarter quarter="Winter" /></Grid.Col>
-          <Grid.Col span={{xs: 3}}><Quarter quarter="Spring" /></Grid.Col>
-          <Grid.Col span={{xs: 3}}><Quarter quarter="Summer" /></Grid.Col>
+          {quarters}
         </Grid>
       </div>   
     </>

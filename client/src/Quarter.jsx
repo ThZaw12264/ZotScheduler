@@ -1,23 +1,18 @@
-import { Table } from '@mantine/core';
+import { Table, Skeleton } from '@mantine/core';
 
-const data = [
-  {
-    class: "ICS53"
-  },
-  {
-    class: "ICS31"
-  },
-  {
-    class: "CS121"
-  }
-]  
-
-function Quarter({quarter}) {
-  const rows = data.map((row) => (
-    <Table.Tr key={row.class}>
-        <Table.Td>{row.class}</Table.Td>
-    </Table.Tr>
-  ));
+function Quarter({quarterName, quarterData}) {
+  const rows = (Object.keys(quarterData).length === 0) 
+    ? <Table.Tr>
+        <Table.Td>
+          <Skeleton height={20} radius="sm" />
+        </Table.Td>
+      </Table.Tr>
+    :
+      quarterData.map((classTaken) => (
+        <Table.Tr key={classTaken}>
+            <Table.Td>{classTaken}</Table.Td>
+        </Table.Tr>
+      ));
 
   return (
     <>
@@ -25,7 +20,7 @@ function Quarter({quarter}) {
         <Table>
           <Table.Thead>
             <Table.Tr>
-              <Table.Th>{quarter}</Table.Th>
+              <Table.Th>{quarterName}</Table.Th>
             </Table.Tr>
           </Table.Thead>
           <Table.Tbody>{rows}</Table.Tbody>

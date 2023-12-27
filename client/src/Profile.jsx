@@ -1,15 +1,6 @@
-import { useEffect, useState } from 'react';
 import { Paper, Title, Divider, TextInput } from '@mantine/core';
 
-function Profile({data}) {
-    const [name, setName] = useState("");   
-    const [major, setMajor] = useState("");
-
-    useEffect(() => {
-        setName(data["name"] || "");
-        setMajor(data["major"] || "");
-    }, [data]);
-     
+function Profile({studentName, studentMajor, setStudentName, setStudentMajor}) {
     return (
         <>
             <Paper shadow="xs" radius="md" withBorder p="lg" bg="#FDFDFD" w="50%">
@@ -18,15 +9,15 @@ function Profile({data}) {
                 <TextInput
                     type="text"
                     label="Student Name"
-                    value={name}
-                    onChange={(e) => {setName(e.target.value)}}
+                    value={studentName}
+                    onChange={(e) => {setStudentName(e.target.value)}}
                     pb="xs"
                 ></TextInput>
                 <TextInput
                     type="text"
                     label="Major"
-                    value={major}
-                    onChange={(e) => {setMajor(e.target.value)}}
+                    value={studentMajor}
+                    onChange={(e) => {setStudentMajor(e.target.value)}}
                 ></TextInput>
             </Paper>
         </>

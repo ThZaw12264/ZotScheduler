@@ -1,16 +1,25 @@
-import { Grid, Container, Divider } from '@mantine/core';
+import { Grid, Container } from '@mantine/core';
 import Year from './Year'
 
-function LeftPane() {
+function LeftPane({studentClassesTaken}) {
+  const years = (Object.keys(studentClassesTaken).length === 0)
+  ? <>
+    <Grid.Col><Year yearName="First Year" yearData={{}}/></Grid.Col>
+    <Grid.Col><Year yearName="Second Year" yearData={{}}/></Grid.Col>
+    <Grid.Col><Year yearName="Third Year" yearData={{}}/></Grid.Col>
+    <Grid.Col><Year yearName="Fourth Year" yearData={{}}/></Grid.Col>
+    </>
+  :
+    Object.keys(studentClassesTaken).map((year) => (
+      <Grid.Col key={year}><Year yearName={year} yearData={studentClassesTaken[year]}/></Grid.Col>
+    ));
+
   return (
     <>
       <div className="pane">
         <Container>
           <Grid gutter='lg'>
-            <Grid.Col><Year year="First Year (2021)"/></Grid.Col>
-            <Grid.Col><Year year="Second Year (2022)"/></Grid.Col>
-            <Grid.Col><Year year="Third Year (2023)"/></Grid.Col>
-            <Grid.Col><Year year="Fourth Year (2024)"/></Grid.Col>
+            {years}
           </Grid>
         </Container>
       </div>    
