@@ -10,7 +10,7 @@ function App() {
   const [studentName, setStudentName] = useState("");
   const [studentMajor, setStudentMajor] = useState("");
   const [studentClassesTaken, setStudentClassesTaken] = useState({});
-  const [studentClassesRemaining, setStudentClassesRemaining] = useState({});
+  const [studentClassesNeeded, setStudentClassesNeeded] = useState({});
 
   const handleUpload = async (file) => {
     setParsingStatus("parsing");
@@ -30,7 +30,7 @@ function App() {
           setStudentName(data["name"]);
           setStudentMajor(data["major"]);
           setStudentClassesTaken(data["classes_taken"]);
-          // setStudentClassesRemaining(data["classes_remaining"]);
+          setStudentClassesNeeded(data["classes_needed"]);
           setParsingStatus("success");
         }
       );
@@ -46,7 +46,7 @@ function App() {
       <main>
         <SplitPane split="vertical">
           <LeftPane studentClassesTaken={studentClassesTaken}/>
-          <RightPane studentName={studentName} studentMajor={studentMajor} setStudentName={setStudentName} setStudentMajor={setStudentMajor} handleUpload={handleUpload}/>
+          <RightPane studentName={studentName} studentMajor={studentMajor} studentClassesNeeded={studentClassesNeeded} setStudentName={setStudentName} setStudentMajor={setStudentMajor} handleUpload={handleUpload}/>
         </SplitPane>
       </main>
       <ParsingNotification parsingStatus={parsingStatus} />
