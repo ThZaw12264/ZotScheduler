@@ -16,56 +16,91 @@ def find(string, stoplist, page):
 			break
 	return res.strip()
 
-doc = fitz.open("DegreeWorks.pdf")
-# doc = fitz.open(sys.argv[1]) # open a document
-out = open("output.txt", "wb") # create a text output
+def find_classes_taken(blocks):
+	quarters = ["FALL", "WINTER", "SPRING", "SUMMER"]
+	year_quarter_regex = r"\b([\d]{4})\b\s(" + "|".join(quarters) + ")"
+	units_regex1 = r"\b(\d)\b"
+	units_regex2 = r"(\(\b(\d)\b\))"
 
-for page in doc: # iterate the document pages
-	if page.number == 0:
-		major = find("MAJOR", ["PROGRAM", "COLLEGE"], page)
-		name = find("NAME", ["STUDENT"], page)
-	text = page.get_text().encode("utf-8") # get plain text (could also omit "utf-8")
-	out.write(text) # write text of page
-	out.write(bytes((12,))) # write page delimiter (form feed 0x0C)
-	
-	# words = page.get_text("words") # list of words on page
-	# for word in words:
-	# 	out.write(word[4].encode("utf-8")) # write word encoding UTF-8
-	# 	out.write(bytes((10,))) # write line delimiter (LF 0x0A)
-out.close()
+	classes_taken = dict()
+	for block in blocks:
+		lines = block[4].upper().split("\n")
+		lines = [line.strip() for line in lines]
+		if len(lines) < 6: continue
+		year_quarter_match = re.match(year_quarter_regex, lines[-2])
+		units_match1 = re.match(units_regex1, lines[-3])
+		units_match2 = re.match(units_regex2, lines[-3])
 
-quarters = ["FALL", "WINTER", "SPRING", "SUMMER"]
+		if year_quarter_match and (units_match1 or units_match2): # found a taken class block
+			year = int(year_quarter_match.group(1))
+			quarter = year_quarter_match.group(2)
+			year_to_year = str(year) + "-" + str(year+1) if quarter == "FALL" else str(year-1) + "-" + str(year)
+			class_taken = lines[-6]
+			if year_to_year not in classes_taken:
+				classes_taken[year_to_year] = dict()
+				for q in quarters:
+					classes_taken[year_to_year][q] = list()
+			if class_taken not in classes_taken[year_to_year][quarter]:
+				# units = int(units_match1.group(1)) if units_match1 else int(units_match2.group(2))
+				classes_taken[year_to_year][quarter].append(class_taken)
+	return classes_taken
 
-quarter_regex = r"^([\d]{4})\s(" + "|".join(quarters) + ")"
-units_regex1 = r"\b(\d)\b"
-units_regex2 = r"(\(\b(\d)\b\))"
+def find_classes_needed(blocks):
+	classes_needed = dict()
+	for block_num, block in enumerate(blocks):
+		lines = block[4].upper().split("\n")
+		lines = [line.strip() for line in lines]
+		if len(lines) < 3: continue
+		try:
+			index = lines.index("STILL NEEDED:") # raise ValueError if not found
+			l = chr(32).join(lines[index+1:-1]).split(" ", 3) # ["1", "CLASS", "IN", "REST OF THE LIST ..."]
+			num_classes_needed = int(l[0]) # raise ValueError if not valid convertable int
+			classes_needed[block_num] = dict()
+			classes_needed[block_num]["num_needed"] = num_classes_needed
+			classes_needed[block_num]["classes"] = parse_classes_needed(l[3])
+		except ValueError:
+			continue
+	return classes_needed
 
-classes_taken = dict()
-with open("output.txt", "r") as file:
-	lines = file.readlines()
-	for i, line in enumerate(lines):
-		quarter_match = re.match(quarter_regex, line, re.IGNORECASE)
+def parse_classes_needed(line):
+	classes_needed = dict()
+	classes = line.split(" OR ")
+	curr_dept = ""
+	for c in classes:
+		words = c.split(" ")
+		if len(words) == 1:
+			if ":" in words[0]:
+				nums = get_range(words[0]) 
+				classes_needed[curr_dept].extend(nums)
+			else:
+				num = words[0].replace("@", "A")
+				classes_needed[curr_dept].append(num)
+		elif len(words) == 2:
+			curr_dept = words[0]
+			if ":" in words[1]:
+				nums = get_range(words[1]) 
+				classes_needed[curr_dept] = nums
+			else:
+				num = words[1].replace("@", "A")
+				classes_needed[curr_dept] = [num]
+	return classes_needed
 
-		if quarter_match: # check if line is a quarter
-			units_match1 = re.match(units_regex1, lines[i-1])
-			units_match2 = re.match(units_regex2, lines[i-1])
+def get_range(r):
+	s, e = r.split(":")
+	start, end = int(s), int(e)
+	return [str(i) for i in range(start, end+1)]
 
-			if units_match1 or units_match2: # check if line before has valid units
-				year = int(quarter_match.group(1))
-				quarter = quarter_match.group(2)
-				year_to_year = str(year) + "-" + str(year+1) if quarter == "FALL" else str(year-1) + "-" + str(year)
-				class_taken = lines[i-4].strip()
-				if year_to_year not in classes_taken:
-					classes_taken[year_to_year] = dict()
-					for q in quarters:
-						classes_taken[year_to_year][q] = list()
-				if class_taken not in classes_taken[year_to_year][quarter]:
-					# units = int(units_match1.group(1)) if units_match1 else int(units_match2.group(2))
-					classes_taken[year_to_year][quarter].append(class_taken)
 
-data = dict()
-data["name"] = name.split(", ")[1] + " " + name.split(", ")[0]
-data["major"] = major
-data["classes_taken"] = classes_taken
-print(json.dumps(data))
-sys.stdout.flush()
+with fitz.open(sys.argv[1]) as doc:
+	data = dict()
+	name = find("NAME", ["STUDENT"], doc[0])
+	data["name"] = name.split(", ")[1] + " " + name.split(", ")[0]
+	data["major"] = find("MAJOR", ["PROGRAM", "COLLEGE", "B.S."], doc[0])
+
+	ll = [page.get_text("blocks")[1:] for page in doc] # list of lists of blocks for each page
+	blocks = sum(ll, []) # flatten list
+	data["classes_taken"] = find_classes_taken(blocks)
+	data["classes_needed"] = find_classes_needed(blocks)
+
+	print(json.dumps(data))
+	sys.stdout.flush()
