@@ -53,9 +53,9 @@ p, h1, h2, h3 {
 	font-family: 'Rocher';
 } 
 .white{
-	font-palette: --White;
+	font-palette: --Aqua;
 }
-@font-palette-values --White{
+@font-palette-values --Aqua{
 	font-family: Rocher;
   	base-palette: 4;
 }
