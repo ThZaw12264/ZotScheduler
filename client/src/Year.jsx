@@ -17,10 +17,10 @@ function Year({yearName, yearData}) {
   return (
     <>
       <div className="year">
-        <Group className="year-header" pb="xs">
+        <Group className="year-header">
           <Title order={4}>{yearName}</Title>
         </Group>
-        <Grid gutter='xs'>
+        <Grid mt="xs" gutter='xs'>
           {quarters}
         </Grid>
       </div>   
