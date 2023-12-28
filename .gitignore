@@ -28,5 +28,7 @@ pymupdf-venv/
 
 # Server
 uploads/
-DegreeWorks.pdf
-output.txt
+DG.pdf
+SE.pdf
+output1.txt
+output2.txt
