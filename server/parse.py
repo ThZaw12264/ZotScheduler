@@ -45,7 +45,19 @@ def find_classes_taken(blocks):
 				classes_taken[year_to_year][quarter].append(class_taken)
 	return classes_taken
 
-def find_classes_needed(blocks):
+def sort_by_dept(classes_taken):
+	classes_taken_by_dept = dict()
+	for year_to_year in classes_taken:
+		for quarter in classes_taken[year_to_year]:
+			for class_taken in classes_taken[year_to_year][quarter]:
+				dept, num = class_taken.split(" ")
+				if dept not in classes_taken_by_dept:
+					classes_taken_by_dept[dept] = [num]
+				elif num not in classes_taken_by_dept[dept]:
+					classes_taken_by_dept[dept].append(num)
+	return classes_taken_by_dept
+
+def find_classes_needed(blocks, classes_taken_by_dept):
 	classes_needed = dict()
 	for block_num, block in enumerate(blocks):
 		lines = block[4].upper().split("\n")
@@ -57,7 +69,8 @@ def find_classes_needed(blocks):
 			num_classes_needed = int(l[0]) # raise ValueError if not valid convertable int
 			classes_needed[block_num] = dict()
 			classes_needed[block_num]["num_needed"] = num_classes_needed
-			classes_needed[block_num]["classes"] = parse_classes_needed(l[3])
+			classes_needed_by_dept = parse_classes_needed(l[3])
+			classes_needed[block_num]["classes"] = filter_classes_needed(classes_needed_by_dept, classes_taken_by_dept)
 		except ValueError:
 			continue
 	return classes_needed
@@ -90,8 +103,13 @@ def get_range(r):
 	start, end = int(s), int(e)
 	return [str(i) for i in range(start, end+1)]
 
+def filter_classes_needed(classes_needed_by_dept, classes_taken_by_dept):
+	for dept in classes_needed_by_dept:
+		classes_needed_by_dept[dept] = [num for num in classes_needed_by_dept[dept] if (dept not in classes_taken_by_dept or num not in classes_taken_by_dept[dept])]
+	return classes_needed_by_dept
 
-with fitz.open(sys.argv[1]) as doc:
+
+with fitz.open("DG.pdf") as doc:
 	data = dict()
 	name = find("NAME", ["STUDENT"], doc[0])
 	data["name"] = name.split(", ")[1] + " " + name.split(", ")[0]
@@ -99,8 +117,10 @@ with fitz.open(sys.argv[1]) as doc:
 
 	ll = [page.get_text("blocks")[1:] for page in doc] # list of lists of blocks for each page
 	blocks = sum(ll, []) # flatten list
-	data["classes_taken"] = find_classes_taken(blocks)
-	data["classes_needed"] = find_classes_needed(blocks)
+	classes_taken = find_classes_taken(blocks)
+	data["classes_taken"] = classes_taken
+	classes_taken_by_dept = sort_by_dept(classes_taken)
+	data["classes_needed"] = find_classes_needed(blocks, classes_taken_by_dept)
 
 	print(json.dumps(data))
 	sys.stdout.flush()
