@@ -8,9 +8,11 @@ function ClassesNeeded({ studentClassesNeeded }) {
 
         return (
             <React.Fragment key={block}>
-                <Text mt="md">{num_needed} {classText} required from:</Text>
+                <Text mt="md"><b>{num_needed}</b> {classText} required from:</Text>
                 {Object.entries(classes).map(([dept, classList]) => (
-                    <Text key={dept} ml="lg">{dept}: {classList.toString()}</Text>
+                    <Text key={dept} ml="lg" c="#0077b6"><b>{dept}</b>:
+                        <Text component="span" ml="xs" c="rgb(33, 37, 41)">{classList.join(", ")}</Text>
+                    </Text>
                 ))}
             </React.Fragment>
         );

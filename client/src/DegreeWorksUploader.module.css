@@ -22,4 +22,6 @@
     width: rem(250px);
     bottom: rem(20px);
     left: calc(50% - rem(60px));
+    --button-bg: #0077b6;
+    --button-hover: #0069a1;
 }
