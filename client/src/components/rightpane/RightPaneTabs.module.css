@@ -1,0 +1,6 @@
+.tab {
+  height: rem(54);
+  &:hover {
+    background-color: light-dark(var(--mantine-color-gray-1), var(--mantine-color-dark-5));
+  }
+}
