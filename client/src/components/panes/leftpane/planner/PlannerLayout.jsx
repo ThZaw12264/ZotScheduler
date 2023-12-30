@@ -1,6 +1,6 @@
 import { Grid } from '@mantine/core';
 import Year from './Year';
-import classes from '../PaneContentLayout.module.css';
+import classes from '../../PaneContentLayout.module.css';
 
 function PlannerLayout({ studentClassesTaken }) {
     const renderYears = () => {

@@ -1,4 +1,4 @@
-import classes from '../PaneContentLayout.module.css';
+import classes from '../../PaneContentLayout.module.css';
 
 function ScheduleLayout() {
     return (

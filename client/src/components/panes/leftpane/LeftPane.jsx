@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import LeftPaneTabs from './LeftPaneTabs';
-import PlannerLayout from './PlannerLayout';
-import ScheduleLayout from './ScheduleLayout';
+import PlannerLayout from './planner/PlannerLayout';
+import ScheduleLayout from './schedule/ScheduleLayout';
 import classes from '../Pane.module.css';
 
 function LeftPane({ studentClassesTaken }) {

@@ -1,10 +1,12 @@
 import { Tabs, Text } from '@mantine/core';
-import classes from './RightPaneTabs.module.css';
+import classes from '../PaneTabs.module.css';
 
 function RightPaneTabs({ setTab }) {
   return (
     <Tabs
       defaultValue="Upload"
+      radius={15}
+      color="teal"
       classNames={{
           tab: classes.tab,
       }}
@@ -12,15 +14,13 @@ function RightPaneTabs({ setTab }) {
       <Tabs.List grow>
           <Tabs.Tab 
             value="Upload" 
-            color = "teal"
             onClick={() => setTab('Upload')}>
-          <Text size="lg" fw={500}>Upload</Text>
+          <Text size="xl" fw={600}>Upload</Text>
           </Tabs.Tab>
           <Tabs.Tab 
             value="Generate" 
-            color = "blue"
             onClick={() => setTab('Generate')}>
-          <Text size="lg" fw={500}>Generate</Text>
+          <Text size="xl" fw={600}>Generate</Text>
           </Tabs.Tab>
       </Tabs.List>
     </Tabs>
