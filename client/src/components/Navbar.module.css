@@ -1,0 +1,29 @@
+.navbar {
+	display: flex;
+	background-color: #0077b6;
+  	height: 48px;
+}
+
+.navbar .leftwrapper, .rightwrapper{
+	display: inline-flex;
+  	align-items: center;
+	height: 48px;
+	padding: 15px;
+}
+
+.navbar .rightwrapper{
+	margin-left: auto;
+}
+
+.navbar h1{
+	font-family: 'Rocher';
+} 
+
+.navbar .aqua{
+	font-palette: --Aqua;
+}
+
+.navbar button{
+    --button-bg: #0077b6;
+	--button-hover: #0069a1;
+}

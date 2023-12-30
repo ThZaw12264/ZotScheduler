@@ -1,9 +1,10 @@
 import { useState } from 'react';
 import Navbar from './Navbar';
 import SplitPane from 'react-split-pane';
-import LeftPane from './LeftPane';
-import RightPane from './RightPane';
+import LeftPane from './panes/leftpane/LeftPane';
+import RightPane from './panes/rightpane/RightPane';
 import ParsingNotification from './ParsingNotification';
+import './App.module.css';
 
 function App() {
   const [parsingStatus, setParsingStatus] = useState();

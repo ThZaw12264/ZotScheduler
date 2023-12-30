@@ -1,0 +1,25 @@
+@import '@mantine/core/styles.css';
+@import 'https://fonts.googleapis.com/css?family=Open+Sans';
+
+@font-face {
+	font-family: 'Rocher';
+	src: url(https://assets.codepen.io/9632/RocherColorGX.woff2);
+  }
+@font-palette-values --Aqua{
+	font-family: Rocher;
+  	base-palette: 4;
+}
+
+* {
+	-webkit-box-sizing: border-box;
+	box-sizing: border-box;
+}
+
+body {
+	margin: 0;
+	font-family: 'Open Sans', sans-serif;
+	line-height: 1.75em;
+	font-size: 16px;
+	background-color: #E4F6F8;
+	color: #212529;
+}

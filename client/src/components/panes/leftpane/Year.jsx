@@ -1,5 +1,6 @@
 import { Grid, Group, Title } from '@mantine/core';
 import Quarter from './Quarter';
+import classes from './Year.module.css';
 
 function Year({ yearName, yearData }) {
   const renderQuarters = () => {
@@ -30,7 +31,7 @@ function Year({ yearName, yearData }) {
   };
 
   return (
-    <div className="year">
+    <div className={classes.year}>
       <Group className="year-header">
         <Title order={4}>{yearName}</Title>
       </Group>

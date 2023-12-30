@@ -1,0 +1,18 @@
+div[data-type="Resizer"] {
+  min-height: calc(100vh - 74px);
+  margin: 10px 0 10px 0;
+  width: 14px;
+  background: #0077b6;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='30'><path d='M2 0 v30 M5 0 v30 M8 0 v30' fill='none' stroke='black'/></svg>");
+  background-repeat: no-repeat;
+  background-position: center;
+  opacity: 1;
+  cursor: ew-resize;
+}
+
+div[data-type="Resizer"]:hover {
+  -webkit-transition: all 0.1s ease;
+  transition: all 0.1s ease;
+  border-left: 3px solid rgba(0, 0, 0, 0.25);
+  border-right: 3px solid rgba(0, 0, 0, 0.25);
+}
