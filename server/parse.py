@@ -4,17 +4,24 @@ import ast
 import fitz
 import re
 
-def find(string, stoplist, page):
+def find(stringlist, stoplist, page):
 	words = page.get_text("words")
 	res = ""
 	for i, word in enumerate(words):
-		if word[4].upper() == string:
+		if word[4].upper() in stringlist:
 			j = i+1
 			while j < len(words) and words[j][4].upper() not in stoplist:
 				res += words[j][4] + " "
 				j += 1
 			break
 	return res.strip()
+
+def find_student_info(page):
+	name = find(["NAME"], ["STUDENT"], doc[0])
+	name = name.split(", ")[1] + " " + name.split(", ")[0]
+	major = find(["MAJOR"], ["PROGRAM", "COLLEGE", "B.S."], doc[0])
+	specialization = find(["SPECIALIZATION", "CONCENTRATION", "EMPHASIS"], ["B.S."], doc[0])
+	return [name, major, specialization]
 
 def find_classes_taken(blocks):
 	quarters = ["FALL", "WINTER", "SPRING", "SUMMER"]
@@ -23,6 +30,7 @@ def find_classes_taken(blocks):
 	units_regex2 = r"(\(\b(\d)\b\))"
 
 	classes_taken = dict()
+	classes_taken_by_dept = dict()
 	for block in blocks:
 		lines = block[4].upper().split("\n")
 		lines = [line.strip() for line in lines]
@@ -36,29 +44,27 @@ def find_classes_taken(blocks):
 			quarter = year_quarter_match.group(2)
 			year_to_year = str(year) + "-" + str(year+1) if quarter == "FALL" else str(year-1) + "-" + str(year)
 			class_taken = lines[-6]
+			dept, num = class_taken.split()
+
 			if year_to_year not in classes_taken:
 				classes_taken[year_to_year] = dict()
 				for q in quarters:
-					classes_taken[year_to_year][q] = list()
-			if class_taken not in classes_taken[year_to_year][quarter]:
-				# units = int(units_match1.group(1)) if units_match1 else int(units_match2.group(2))
-				classes_taken[year_to_year][quarter].append(class_taken)
-	return classes_taken
+					classes_taken[year_to_year][q] = dict()
 
-def sort_by_dept(classes_taken):
-	classes_taken_by_dept = dict()
-	for year_to_year in classes_taken:
-		for quarter in classes_taken[year_to_year]:
-			for class_taken in classes_taken[year_to_year][quarter]:
-				dept, num = class_taken.split(" ")
-				if dept not in classes_taken_by_dept:
-					classes_taken_by_dept[dept] = [num]
-				elif num not in classes_taken_by_dept[dept]:
-					classes_taken_by_dept[dept].append(num)
-	return classes_taken_by_dept
+			add_class_taken(classes_taken[year_to_year][quarter], dept, num)
+			add_class_taken(classes_taken_by_dept, dept, num)
+			
+	return [classes_taken, classes_taken_by_dept]
 
-def find_classes_needed(blocks, classes_taken_by_dept):
-	classes_needed = dict()
+def add_class_taken(d, dept, num):
+	if dept not in d:
+		d[dept] = [num]
+	elif num not in d[dept]:
+		d[dept].append(num)
+
+def find_classes_needed(blocks, ct_by_dept):
+	cn_dict = dict()
+	cn_by_dept_dict = dict()
 	for block_num, block in enumerate(blocks):
 		lines = block[4].upper().split("\n")
 		lines = [line.strip() for line in lines]
@@ -67,13 +73,17 @@ def find_classes_needed(blocks, classes_taken_by_dept):
 			index = lines.index("STILL NEEDED:") # raise ValueError if not found
 			l = chr(32).join(lines[index+1:-1]).split(" ", 3) # ["1", "CLASS", "IN", "REST OF THE LIST ..."]
 			num_classes_needed = int(l[0]) # raise ValueError if not valid convertable int
-			classes_needed[block_num] = dict()
-			classes_needed[block_num]["num_needed"] = num_classes_needed
-			classes_needed_by_dept = parse_classes_needed(l[3])
-			classes_needed[block_num]["classes"] = filter_classes_needed(classes_needed_by_dept, classes_taken_by_dept)
+			cn_by_dept = parse_classes_needed(l[3])
+			cn_by_dept = filter_classes_needed(cn_by_dept, ct_by_dept)
+
+			cn_dict[block_num] = dict()
+			cn_dict[block_num]["num_needed"] = num_classes_needed
+			cn_dict[block_num]["classes"] = cn_by_dept
+
+			cn_by_dept_dict.update(cn_by_dept)
 		except ValueError:
 			continue
-	return classes_needed
+	return [cn_dict, cn_by_dept_dict]
 
 def parse_classes_needed(line):
 	classes_needed = dict()
@@ -110,17 +120,20 @@ def filter_classes_needed(classes_needed_by_dept, classes_taken_by_dept):
 
 
 with fitz.open("DG.pdf") as doc:
-	data = dict()
-	name = find("NAME", ["STUDENT"], doc[0])
-	data["name"] = name.split(", ")[1] + " " + name.split(", ")[0]
-	data["major"] = find("MAJOR", ["PROGRAM", "COLLEGE", "B.S."], doc[0])
-
 	ll = [page.get_text("blocks")[1:] for page in doc] # list of lists of blocks for each page
 	blocks = sum(ll, []) # flatten list
-	classes_taken = find_classes_taken(blocks)
+	name, major, specialization = find_student_info(doc[0])
+	classes_taken, classes_taken_by_dept = find_classes_taken(blocks)
+	classes_needed, classes_needed_by_dept = find_classes_needed(blocks, classes_taken_by_dept)
+
+	data = dict()
+	data["name"] = name
+	data["major"] = major
+	data["specialization"] = specialization
 	data["classes_taken"] = classes_taken
-	classes_taken_by_dept = sort_by_dept(classes_taken)
-	data["classes_needed"] = find_classes_needed(blocks, classes_taken_by_dept)
+	data["classes_taken_by_dept"] = classes_taken_by_dept
+	data["classes_needed"] = classes_needed
+	data['classes_needed_by_dept'] = classes_needed_by_dept
 
 	print(json.dumps(data))
 	sys.stdout.flush()
