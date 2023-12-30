@@ -7,5 +7,6 @@
 
   &[data-active] {
     background-color: #89B4F9;
+    font-weight: 600;
   }
 }
