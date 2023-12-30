@@ -1,40 +1,21 @@
-import { Grid } from '@mantine/core';
-import Year from './Year';
+import { useState } from 'react';
+import LeftPaneTabs from './LeftPaneTabs';
+import PlannerLayout from './PlannerLayout';
+import ScheduleLayout from './ScheduleLayout';
 import classes from '../Pane.module.css';
 
 function LeftPane({ studentClassesTaken }) {
-  const renderYears = () => {
-    if (Object.keys(studentClassesTaken).length === 0) {
-      return (
-        <>
-          <Grid.Col>
-            <Year yearName="First Year" yearData={{}} />
-          </Grid.Col>
-          <Grid.Col>
-            <Year yearName="Second Year" yearData={{}} />
-          </Grid.Col>
-          <Grid.Col>
-            <Year yearName="Third Year" yearData={{}} />
-          </Grid.Col>
-          <Grid.Col>
-            <Year yearName="Fourth Year" yearData={{}} />
-          </Grid.Col>
-        </>
-      );
-    } else {
-      return Object.keys(studentClassesTaken).map((year) => (
-        <Grid.Col key={year}>
-          <Year yearName={year} yearData={studentClassesTaken[year]} />
-        </Grid.Col>
-      ));
-    }
-  };
+  const [tab, setTab] = useState('Planner');
 
   return (
     <div className={classes.pane}>
-      <Grid gutter="lg">
-        {renderYears()}
-      </Grid>
+      <LeftPaneTabs setTab={setTab} />
+      {tab === 'Planner' &&
+        <PlannerLayout studentClassesTaken={studentClassesTaken} />
+      }
+      {tab === 'Schedule' &&
+        <ScheduleLayout />
+      }
     </div>
   );
 }
