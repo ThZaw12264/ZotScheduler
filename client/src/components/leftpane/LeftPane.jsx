@@ -1,4 +1,4 @@
-import { Grid, Container } from '@mantine/core';
+import { Grid } from '@mantine/core';
 import Year from './Year';
 import classes from '../Pane.module.css';
 
@@ -32,11 +32,9 @@ function LeftPane({ studentClassesTaken }) {
 
   return (
     <div className={classes.pane}>
-      <Container>
-        <Grid gutter="lg">
-          {renderYears()}
-        </Grid>
-      </Container>
+      <Grid gutter="lg">
+        {renderYears()}
+      </Grid>
     </div>
   );
 }

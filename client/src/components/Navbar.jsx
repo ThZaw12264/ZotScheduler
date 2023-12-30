@@ -22,10 +22,10 @@ function Navbar() {
   return (
     <>
       <header className={classes.navbar}>
-        <div className={classes.leftwrapper}>
+        <div className={classes.leftWrapper}>
           <h1 className={classes.aqua}>ZotScheduler</h1>
         </div>
-        <div className={classes.rightwrapper}>
+        <div className={classes.rightWrapper}>
           <Group>
             {renderButtons()}
           </Group>

@@ -2,17 +2,19 @@
 	display: flex;
 	background-color: #0077b6;
   	height: 48px;
+	border-bottom: rem(1px) solid light-dark(var(--mantine-color-gray-3), var(--mantine-color-dark-4));
 }
 
-.navbar .leftwrapper, .rightwrapper{
+.navbar .leftWrapper, .rightWrapper{
 	display: inline-flex;
   	align-items: center;
 	height: 48px;
 	padding: 15px;
 }
 
-.navbar .rightwrapper{
+.navbar .rightWrapper{
 	margin-left: auto;
+	white-space: nowrap;
 }
 
 .navbar h1{

@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import Navbar from './Navbar';
 import SplitPane from 'react-split-pane';
-import LeftPane from './panes/leftpane/LeftPane';
-import RightPane from './panes/rightpane/RightPane';
+import LeftPane from './leftpane/LeftPane';
+import RightPane from './rightpane/RightPane';
 import ParsingNotification from './ParsingNotification';
 import './App.module.css';
 
