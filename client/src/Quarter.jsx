@@ -13,11 +13,13 @@ function Quarter({quarterName, quarterData}) {
         </>
       );
     } else {
-      return quarterData.map((classTaken) => (
-        <Table.Tr key={classTaken}>
-            <Table.Td>{classTaken}</Table.Td>
-        </Table.Tr>
-      ));
+      return Object.keys(quarterData).map((dept) => {
+        return quarterData[dept].map((num) => (
+          <Table.Tr key={num}>
+              <Table.Td>{dept} {num}</Table.Td>
+          </Table.Tr>
+        ));
+      });
     }
   };
 
