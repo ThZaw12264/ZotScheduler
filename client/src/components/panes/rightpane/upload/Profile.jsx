@@ -1,24 +1,49 @@
-import { Paper, Title, Divider, TextInput, Group } from '@mantine/core';
+import { Paper, Title, Divider, TextInput, NumberInput, Group } from '@mantine/core';
+import classes from './Profile.module.css';
 
-function Profile({studentName, studentMajor, setStudentName, setStudentMajor}) {
+function Profile({ studentProfile, setStudentProfile }) {
     return (
         <>
-            <Paper shadow="xs" radius="md" withBorder p="lg" bg="#FDFDFD" w="50%">
+            <Paper shadow="xs" radius="md" withBorder p="lg" bg="#FDFDFD">
                 <Title order={4}>Profile</Title>
                 <Divider />
-                <Group mt="xs">
+                <Group grow mt="xs">
                     <TextInput
                         type="text"
                         label="Student Name"
-                        value={studentName}
-                        onChange={(e) => {setStudentName(e.target.value)}}
+                        value={studentProfile["name"]}
+                        onChange={(e) => setStudentProfile({ ...studentProfile, name: e.target.value })}
+                        classNames={{ label: classes.label}}
                     ></TextInput>
+
                     <TextInput
                         type="text"
                         label="Major"
-                        value={studentMajor}
-                        onChange={(e) => {setStudentMajor(e.target.value)}}
+                        value={studentProfile["major"]}
+                        onChange={(e) => setStudentProfile({ ...studentProfile, major: e.target.value })}
+                        classNames={{ label: classes.label}}
                     ></TextInput>
+
+                    <TextInput
+                        type="text"
+                        label="Specialization"
+                        value={studentProfile["specialization"]}
+                        onChange={(e) => setStudentProfile({ ...studentProfile, specialization: e.target.value })}
+                        classNames={{ label: classes.label}}
+                    ></TextInput>
+
+                    <NumberInput
+                        type="number"
+                        label="GPA"
+                        value={studentProfile["gpa"]}
+                        clampBehavior="strict"
+                        min={0}
+                        max={4}
+                        decimalScale={2}
+                        rightSection={<></>}
+                        onChange={(e) => setStudentProfile({ ...studentProfile, gpa: e })}
+                        classNames={{ label: classes.label}}
+                    ></NumberInput>
                 </Group>
             </Paper>
         </>
