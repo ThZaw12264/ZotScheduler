@@ -4,7 +4,7 @@ import UploadLayout from './upload/UploadLayout';
 import GenerateLayout from './generate/GenerateLayout';
 import classes from '../Pane.module.css';
 
-function RightPane({studentName, studentMajor, studentClassesNeeded, setStudentName, setStudentMajor, handleUpload}) {
+function RightPane({studentProfile, studentClasses, setStudentClasses, setStudentProfile, setParsingStatus}) {
   const [tab, setTab] = useState('Upload');
 
   return (
@@ -13,12 +13,12 @@ function RightPane({studentName, studentMajor, studentClassesNeeded, setStudentN
         <RightPaneTabs setTab={setTab}/>
         {tab === 'Upload' &&
           <UploadLayout 
-            studentName={studentName} 
-            studentMajor={studentMajor} 
-            studentClassesNeeded={studentClassesNeeded} 
-            setStudentName={setStudentName} 
-            setStudentMajor={setStudentMajor} 
-            handleUpload={handleUpload}/>
+            studentProfile={studentProfile} 
+            studentClasses={studentClasses}
+            setStudentProfile={setStudentProfile}
+            setStudentClasses={setStudentClasses}
+            setParsingStatus={setParsingStatus} 
+          />
         }
         {tab === 'Generate' &&
           <GenerateLayout />

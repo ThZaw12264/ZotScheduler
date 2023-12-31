@@ -4,7 +4,7 @@ function RightPaneTabs({ setTab }) {
   return (
     <PaneTabs 
       setTab={setTab} 
-      labels={['Upload', 'Generate']} 
+      labels={['Upload', 'Generate', 'Search Class']} 
       color="teal" 
     />
   )

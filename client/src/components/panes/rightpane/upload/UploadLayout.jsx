@@ -3,14 +3,21 @@ import Profile from './Profile'
 import ClassesNeeded from './ClassesNeeded'
 import classes from '../../PaneContentLayout.module.css';
 
-function UploadLayout({studentName, studentMajor, studentClassesNeeded, setStudentName, setStudentMajor, handleUpload}) {
+function UploadLayout({studentProfile, studentClasses, setStudentClasses, setStudentProfile, setParsingStatus}) {
   return (
     <>
       <div className={classes.layout}>
-        <DegreeWorksUploader handleUpload={handleUpload} />
-        <Profile studentName={studentName} studentMajor={studentMajor} setStudentName={setStudentName} setStudentMajor={setStudentMajor} />
-        {Object.keys(studentClassesNeeded).length !== 0 &&
-            <ClassesNeeded studentClassesNeeded={studentClassesNeeded} />
+        <DegreeWorksUploader 
+          setStudentProfile={setStudentProfile} 
+          setStudentClasses={setStudentClasses}
+          setParsingStatus={setParsingStatus} 
+        />
+        <Profile 
+          studentProfile={studentProfile} 
+          setStudentProfile={setStudentProfile} 
+        />
+        {Object.keys(studentClasses["needed"]).length !== 0 &&
+            <ClassesNeeded studentClassesNeeded={studentClasses["needed"]} />
         }
       </div>
     </>

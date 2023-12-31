@@ -22,4 +22,5 @@ body {
 	font-size: 16px;
 	background-color: #89B4F940;
 	color: rgb(33, 37, 41);
+  overflow: hidden;
 }

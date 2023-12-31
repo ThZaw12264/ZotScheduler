@@ -1,53 +1,50 @@
 import { useState } from 'react';
 import Navbar from './Navbar';
 import SplitPane from 'react-split-pane';
+import Pane from 'react-split-pane/lib/Pane'
 import LeftPane from './panes/leftpane/LeftPane';
 import RightPane from './panes/rightpane/RightPane';
 import ParsingNotification from './ParsingNotification';
 import './App.module.css';
 
 function App() {
+  const [studentProfile, setStudentProfile] = useState({
+    name: "",
+    major: "",
+    specialization: "",
+    gpa: ""
+  });
+  const [studentClasses, setStudentClasses] = useState({
+    taken: {},
+    takenByDept: {},
+    needed: {},
+    neededByDept: {}
+  });
+
   const [parsingStatus, setParsingStatus] = useState();
-  const [studentName, setStudentName] = useState("");
-  const [studentMajor, setStudentMajor] = useState("");
-  const [studentClassesTaken, setStudentClassesTaken] = useState({});
-  const [studentClassesNeeded, setStudentClassesNeeded] = useState({});
-
-  const handleUpload = async (file) => {
-    setParsingStatus("parsing");
-
-    const formData = new FormData();
-    formData.append("file", file);
-
-    try {
-      fetch("/api/parse", {
-        method: "POST",
-        body: formData,
-      }).then(
-        response => response.json()
-      ).then(
-        data => {
-          console.log(data);
-          setStudentName(data["name"]);
-          setStudentMajor(data["major"]);
-          setStudentClassesTaken(data["classes_taken"]);
-          setStudentClassesNeeded(data["classes_needed"]);
-          setParsingStatus("success");
-        }
-      );
-    } catch (error) {
-      console.error(error);
-      setParsingStatus("fail");
-    }
-  };
 
   return (
     <>
       <Navbar />
       <main>
-        <SplitPane split="vertical">
-          <LeftPane studentClassesTaken={studentClassesTaken}/>
-          <RightPane studentName={studentName} studentMajor={studentMajor} studentClassesNeeded={studentClassesNeeded} setStudentName={setStudentName} setStudentMajor={setStudentMajor} handleUpload={handleUpload}/>
+        <SplitPane 
+          split="vertical"
+          onChange={(e) => {
+            localStorage.setItem("splitPos", e[0]);
+          }}
+        >
+          <Pane initialSize={localStorage.getItem("splitPos")}>
+            <LeftPane studentClassesTaken={studentClasses["taken"]}/>
+          </Pane>
+          <Pane>
+            <RightPane
+              studentProfile={studentProfile} 
+              studentClasses={studentClasses}
+              setStudentProfile={setStudentProfile}
+              setStudentClasses={setStudentClasses}
+              setParsingStatus={setParsingStatus}
+            />
+          </Pane>
         </SplitPane>
       </main>
       <ParsingNotification parsingStatus={parsingStatus} />

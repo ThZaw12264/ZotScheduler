@@ -4,9 +4,45 @@ import { Dropzone, MIME_TYPES } from '@mantine/dropzone';
 import { IconCloudUpload, IconX, IconDownload } from '@tabler/icons-react';
 import classes from './DegreeWorksUploader.module.css';
 
-const DegreeWorksUploader = ({handleUpload }) => {
+const DegreeWorksUploader = ({setStudentProfile, setStudentClasses, setParsingStatus}) => {
   const theme = useMantineTheme();
   const openRef = useRef(null);
+
+  const handleUpload = async (file) => {
+    setParsingStatus("parsing");
+
+    const formData = new FormData();
+    formData.append("file", file);
+
+    try {
+      fetch("/api/parse", {
+        method: "POST",
+        body: formData,
+      }).then(
+        response => response.json()
+      ).then(
+        data => {
+          console.log(data);
+          setStudentProfile({
+            name: data["name"],
+            major: data["major"],
+            specialization: data["specialization"],
+            gpa: data["gpa"]
+          });
+          setStudentClasses({
+            taken: data["classes_taken"],
+            takenByDept: data["classes_taken_by_dept"],
+            needed: data["classes_needed"],
+            neededByDept: data["classes_needed_by_dept"]
+          });
+          setParsingStatus("success");
+        }
+      );
+    } catch (error) {
+      console.error(error);
+      setParsingStatus("fail");
+    }
+  };
 
   return (
     <>
