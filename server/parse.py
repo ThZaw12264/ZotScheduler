@@ -4,24 +4,25 @@ import ast
 import fitz
 import re
 
-def find(stringlist, stoplist, page):
-	words = page.get_text("words")
-	res = ""
-	for i, word in enumerate(words):
-		if word[4].upper() in stringlist:
-			j = i+1
-			while j < len(words) and words[j][4].upper() not in stoplist:
-				res += words[j][4] + " "
-				j += 1
-			break
-	return res.strip()
-
-def find_student_info(page):
-	name = find(["NAME"], ["STUDENT"], doc[0])
+def find(stringlist, stoplist, blocks):
+	res = []
+	for block in blocks:
+		words = block[4].upper().split()
+		for i, word in enumerate(words):
+			if word in stringlist:
+				j = i+1
+				while j < len(words) and words[j] not in stoplist:
+					res.append(words[j])
+					j += 1
+				return " ".join(res)
+	
+def find_student_info(blocks):
+	name = find(["NAME"], [], blocks)
 	name = name.split(", ")[1] + " " + name.split(", ")[0]
-	major = find(["MAJOR"], ["PROGRAM", "COLLEGE", "B.S."], doc[0])
-	specialization = find(["SPECIALIZATION", "CONCENTRATION", "EMPHASIS"], ["B.S."], doc[0])
-	return [name, major, specialization]
+	major = find(["MAJOR"], ["PROGRAM", "COLLEGE", "SPECIALIZATION"], blocks)
+	specialization = find(["SPECIALIZATION", "CONCENTRATION", "EMPHASIS"], [], blocks)
+	gpa = find(["GPA"], [], blocks)
+	return [name, major, specialization, gpa]
 
 def find_classes_taken(blocks):
 	quarters = ["FALL", "WINTER", "SPRING", "SUMMER"]
@@ -122,7 +123,11 @@ def filter_classes_needed(classes_needed_by_dept, classes_taken_by_dept):
 with fitz.open("DG.pdf") as doc:
 	ll = [page.get_text("blocks")[1:] for page in doc] # list of lists of blocks for each page
 	blocks = sum(ll, []) # flatten list
-	name, major, specialization = find_student_info(doc[0])
+	# for block in blocks:
+	# 	print("open")
+	# 	print(block[4])
+	# 	print("close")
+	name, major, specialization, gpa = find_student_info(blocks)
 	classes_taken, classes_taken_by_dept = find_classes_taken(blocks)
 	classes_needed, classes_needed_by_dept = find_classes_needed(blocks, classes_taken_by_dept)
 
@@ -130,6 +135,7 @@ with fitz.open("DG.pdf") as doc:
 	data["name"] = name
 	data["major"] = major
 	data["specialization"] = specialization
+	data["gpa"] = gpa
 	data["classes_taken"] = classes_taken
 	data["classes_taken_by_dept"] = classes_taken_by_dept
 	data["classes_needed"] = classes_needed
