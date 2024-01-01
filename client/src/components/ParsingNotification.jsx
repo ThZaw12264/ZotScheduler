@@ -1,8 +1,11 @@
 import { showNotification } from '@mantine/notifications'
 import { IconCheck, IconX } from '@tabler/icons-react';
-import { useCallback, useEffect } from 'react';
+import { useEffect } from 'react';
+import { useStudentContext } from '../contexts/StudentContext';
 
-const ParsingNotification = ({parsingStatus}) => {
+function ParsingNotification() {
+    const { parsingStatus } = useStudentContext();
+
     const xIcon = <IconX style={{ width: "rem(20)", height: "rem(20)" }} />;
     const checkIcon = <IconCheck style={{ width: "rem(20)", height: "rem(20)" }} />;
 

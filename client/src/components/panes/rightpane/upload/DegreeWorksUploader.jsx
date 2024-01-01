@@ -2,9 +2,12 @@ import { useRef } from 'react';
 import { Text, Group, Button, rem, useMantineTheme } from '@mantine/core';
 import { Dropzone, MIME_TYPES } from '@mantine/dropzone';
 import { IconCloudUpload, IconX, IconDownload } from '@tabler/icons-react';
+import { useStudentContext } from '../../../../contexts/StudentContext';
 import classes from './DegreeWorksUploader.module.css';
 
-const DegreeWorksUploader = ({setStudentProfile, setStudentClasses, setParsingStatus}) => {
+function DegreeWorksUploader() {
+  const { setStudentProfile, setStudentClasses, setParsingStatus } = useStudentContext();
+
   const theme = useMantineTheme();
   const openRef = useRef(null);
 

@@ -1,21 +1,17 @@
 import DegreeWorksUploader from './DegreeWorksUploader'
 import Profile from './Profile'
 import ClassesNeeded from './ClassesNeeded'
+import { useStudentContext } from '../../../../contexts/StudentContext';
 import classes from '../../PaneContentLayout.module.css';
 
-function UploadLayout({studentProfile, studentClasses, setStudentClasses, setStudentProfile, setParsingStatus}) {
+function UploadLayout() {
+  const { studentClasses } = useStudentContext();
+
   return (
     <>
       <div className={classes.layout}>
-        <DegreeWorksUploader 
-          setStudentProfile={setStudentProfile} 
-          setStudentClasses={setStudentClasses}
-          setParsingStatus={setParsingStatus} 
-        />
-        <Profile 
-          studentProfile={studentProfile} 
-          setStudentProfile={setStudentProfile} 
-        />
+        <DegreeWorksUploader />
+        <Profile />
         {Object.keys(studentClasses["needed"]).length !== 0 &&
             <ClassesNeeded studentClassesNeeded={studentClasses["needed"]} />
         }
