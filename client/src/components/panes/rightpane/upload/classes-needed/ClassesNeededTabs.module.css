@@ -1,0 +1,11 @@
+.tab {
+  height: rem(30);
+  
+  &:hover {
+    background-color: #89B4F960;
+  }
+
+  &[data-active] {
+    background-color: #89B4F9;
+  }
+}
