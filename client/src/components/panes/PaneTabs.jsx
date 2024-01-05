@@ -16,7 +16,7 @@ function PaneTabs({ setTab, labels, color }) {
   return (
     <Tabs
       defaultValue={labels[0]}
-      radius = {15}
+      radius={15}
       color={color}
       classNames={{
           tab: classes.tab,

@@ -1,6 +1,6 @@
 import DegreeWorksUploader from './DegreeWorksUploader'
 import Profile from './Profile'
-import ClassesNeeded from './ClassesNeeded'
+import ClassesNeeded from './classes-needed/ClassesNeeded'
 import { useStudentContext } from '../../../../contexts/StudentContext';
 import classes from '../../PaneContentLayout.module.css';
 
@@ -13,7 +13,7 @@ function UploadLayout() {
         <DegreeWorksUploader />
         <Profile />
         {Object.keys(studentClasses["needed"]).length !== 0 &&
-            <ClassesNeeded studentClassesNeeded={studentClasses["needed"]} />
+            <ClassesNeeded />
         }
       </div>
     </>

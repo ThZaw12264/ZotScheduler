@@ -36,7 +36,8 @@ function DegreeWorksUploader() {
             taken: data["classes_taken"],
             takenByDept: data["classes_taken_by_dept"],
             needed: data["classes_needed"],
-            neededByDept: data["classes_needed_by_dept"]
+            neededByDept: data["classes_needed_by_dept"],
+            eligible: data["classes_eligible"]
           });
           setParsingStatus("success");
         }

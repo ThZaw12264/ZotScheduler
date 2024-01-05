@@ -11,8 +11,8 @@ ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <MantineProvider>
       <StudentProvider>
-        <Notifications />
         <App />
+        <Notifications />
       </StudentProvider>
     </MantineProvider>
   </React.StrictMode>

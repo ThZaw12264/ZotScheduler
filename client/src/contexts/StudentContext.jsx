@@ -14,7 +14,8 @@ export function StudentProvider({children}) {
       taken: {},
       takenByDept: {},
       needed: {},
-      neededByDept: {}
+      neededByDept: {},
+      eligible: {}
     });
 
     const [parsingStatus, setParsingStatus] = useState();

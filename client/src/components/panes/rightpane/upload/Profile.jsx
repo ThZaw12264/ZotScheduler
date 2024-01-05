@@ -8,7 +8,7 @@ function Profile() {
   return (
     <>
       <Paper shadow="xs" radius="md" withBorder p="lg" bg="#FDFDFD">
-        <Title order={4}>Profile</Title>
+        <Title order={4} className={classes.title}>Profile</Title>
         <Divider />
         <Group grow mt="xs">
           <TextInput
@@ -42,7 +42,7 @@ function Profile() {
             clampBehavior="strict"
             min={0}
             max={4}
-            decimalScale={2}
+            decimalScale={3}
             rightSection={<></>}
             onChange={(e) => setStudentProfile({ ...studentProfile, gpa: e })}
             classNames={{ label: classes.label }}
